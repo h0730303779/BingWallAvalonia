@@ -1,0 +1,199 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="380"
+        x:Class="BingWallAvalonia.Views.Setting"
+		WindowStartupLocation="CenterScreen"
+        Title="Setting">
+
+	<!--<Grid RowDefinitions="50,*" >
+		<Grid Name="TitleBar" Background="LightBlue" DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto">
+			<TextBlock VerticalAlignment="Center" Margin="5,0,0,0">Title</TextBlock>
+			<StackPanel Grid.Column="2" Orientation="Horizontal">
+				<StackPanel.Styles>
+					<Style Selector="Button">
+						<Setter Property="Margin" Value="2"/>
+					</Style>
+				</StackPanel.Styles>
+				<Button Name="MinimizeButton">_</Button>
+				<Button Name="MaximizeButton">[ ]</Button>
+				<Button Name="CloseButton">X</Button>
+			</StackPanel>
+		</Grid>
+		
+	</Grid>-->
+	<Window.Styles>
+		<Style Selector="TabItem:pointerover /template/ Border#PART_LayoutRoot">
+			<Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+		</Style>
+		<Style Selector="TabItem:selected:pointerover /template/ Border#PART_LayoutRoot">
+			<Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}" />
+		</Style>
+		<!-- 选中背景颜色 -->
+		<Style Selector="TabItem:selected">
+			<Setter Property="Background" Value="#EAEAEAEA" />
+			<!--<Setter Property="FontWeight" Value="Bold"/>-->
+		</Style>
+		<!-- TabControl TabItem TabControl 中间加线 -->
+		<Style Selector="Border.settingsContentBorder">
+			<Setter Property="BorderThickness" Value="1,0,0,0" />
+			<Setter Property="BorderBrush" Value="#EAEAEAEA" />
+		</Style>
+
+		<Style Selector="TabItem Border.settingsTabHeaderBorder">
+			<Setter Property="Padding" Value="5,5,10,5" />
+			<Setter Property="CornerRadius" Value="8" />
+			<Setter Property="Margin" Value="0,0,10,0" />
+			<Setter Property="Width" Value="80" />
+		</Style>
+
+
+
+		<!---->
+		<Style Selector="TabItem">
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border
+						Name="PART_LayoutRoot"
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						Padding="{TemplateBinding Padding}">
+						<Panel>
+							<ContentPresenter
+								Name="PART_ContentPresenter"
+								HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                Content="{TemplateBinding Header}"
+                ContentTemplate="{TemplateBinding HeaderTemplate}"
+								 />
+							<Border Name="PART_SelectedPipe"
+					
+									IsVisible="False"/>
+						</Panel>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+		</Style>
+
+		<Style Selector="TabControl">
+			<Setter Property="Padding" Value="0" />
+		</Style>
+
+		<Style Selector="TabStripItem">
+			<Setter Property="Margin" Value="10" />
+		</Style>
+
+		<Style Selector="TextBlock.txtlabel">
+			<Setter Property="HorizontalAlignment" Value="Center" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+	</Window.Styles>
+	<Border Padding="0">
+		<Grid RowDefinitions="*,Auto">
+			<TabControl    TabStripPlacement="Left" SelectedIndex="{Binding SelectedIndex}">
+
+				<TabItem  BorderBrush="Blue"   VerticalContentAlignment="Center" >
+					<TabItem.Header>
+						<Border Classes="settingsTabHeaderBorder">
+							<StackPanel Orientation="Horizontal">
+								<Image Width="20" Height="20" >
+									<!--<DrawingImage Drawing="{StaticResource IconSetting}"/>-->
+									<DrawingImage>
+										<GeometryDrawing Brush="#606266" Geometry="{StaticResource GeoIconSetting}"/>
+									</DrawingImage>
+								</Image>
+								<TextBlock Classes="settingsTabTextBlock" Text="设置" />
+							</StackPanel>
+						</Border>
+					</TabItem.Header>
+					<TabItem.Content>
+						<!-- 设置内容 -->
+						<Border Classes="settingsContentBorder" Background="#EAEAEAEA">
+							
+							<Grid  RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="90,*,Auto" Margin="10">
+								<TextBlock Grid.Column="0" Classes="txtlabel" HorizontalAlignment="Center"  Text="上次文件路径" />
+								<TextBox Grid.Column="1" Classes="settingsTextBox" FontFamily="Microsoft YaHei,Simsun,苹方-简,宋体-简" Text="{Binding PathDir}" />
+								<Button Grid.Column="2" Content="..." />
+
+								<!--<TextBox Grid.Column="1" Classes="settingsTextBox" Text="222" >
+									<TextBox.Styles>
+										<Style Selector="TextBox">
+											<Setter Property="Template">
+												<Setter.Value>
+													<ControlTemplate >
+														<Border
+															Margin="10" BorderBrush="Black" 
+															BoxShadow="0 0 5 0 #BF000000"
+															Background="White"
+															MinWidth="{TemplateBinding MinWidth}"
+															MaxWidth="{TemplateBinding MaxWidth}"
+															Width="{TemplateBinding Width}"
+															>
+
+															<WrapPanel >
+
+																<TextPresenter Name="PART_TextPresenter"
+																									Text="{TemplateBinding Text, Mode=TwoWay}"
+																									CaretIndex="{TemplateBinding CaretIndex}"
+																									SelectionStart="{TemplateBinding SelectionStart}"
+																									SelectionEnd="{TemplateBinding SelectionEnd}"
+																									TextAlignment="{TemplateBinding TextAlignment}"
+																									TextWrapping="{TemplateBinding TextWrapping}"
+																									RevealPassword="{TemplateBinding RevealPassword}"
+																									SelectionBrush="{TemplateBinding SelectionBrush}"
+																									SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+																									CaretBrush="{TemplateBinding CaretBrush}"
+																									HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+																									VerticalAlignment="Center"/>
+																<Button Content="..."></Button>
+														</WrapPanel>
+														</Border>
+													</ControlTemplate>
+												</Setter.Value>
+											</Setter>
+										</Style>
+									</TextBox.Styles>
+								</TextBox>-->
+
+							</Grid>
+						</Border>
+					</TabItem.Content>
+				</TabItem>
+				<TabItem VerticalContentAlignment="Center">
+					<TabItem.Header>
+						<Border Classes="settingsTabHeaderBorder">
+							<StackPanel Orientation="Horizontal" >
+								<Image Width="20" Height="20" >
+									<DrawingImage>
+										<GeometryDrawing Brush="#606266" Geometry="{StaticResource GeoIconAbout}"/>
+									</DrawingImage>
+								</Image>
+								<TextBlock Classes="settingsTabTextBlock" Text="关于" />
+								<!--<TextBlock Classes="settingsTabTextBlock" Text="{x:Static p:Resources.Terminal}" />-->
+							</StackPanel>
+						</Border>
+					</TabItem.Header>
+
+					<TabItem.Content>
+						<!-- 关于内容 -->
+						<Border Classes="settingsContentBorder"  Background="#EAEAEAEA">
+							<StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+								<TextBlock  Text="作者:Summer摇光" />
+
+
+								<TextBlock   Text="博客园:https://www.cnblogs.com/leoxjy" />
+			
+							</StackPanel>
+						</Border>
+					</TabItem.Content>
+				</TabItem>
+			</TabControl>
+		</Grid>
+	</Border>
+
+</Window>

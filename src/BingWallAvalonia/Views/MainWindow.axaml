@@ -1,0 +1,180 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BingWallAvalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="BingWallAvalonia.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+		WindowStartupLocation="CenterScreen"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="BingWallAvalonia">
+
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
+
+	<Window.Styles>
+
+		<Style Selector="Button.buttonTextStyle /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="TextBlock.Foreground" Value="White"/>
+		</Style>
+		<Style Selector="Button.buttonImageStyle /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="TextBlock.Foreground" Value="White"/>
+		</Style>
+
+		<!--<Style Selector="ItemsControl">
+			<Setter Property="Control.DataContext" Value="{Binding}" />
+			<Setter Property="Control.Command" Value="{Binding DataContext.OnBtnChange, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" />
+			<Setter Property="Control.CommandParameter" Value="{Binding}" />
+		</Style>-->
+
+ 
+		<!--<Style Selector="ItemsControl.MyButtonStyle">
+			<Setter Property="Control.DataContext" Value="{Binding}" />
+			<Setter Property="Control.Command" Value="{Binding DataContext.OnBtnChange, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" />
+			<Setter Property="Control.CommandParameter" Value="{Binding}" />
+		</Style>-->
+	</Window.Styles>
+	<Grid>
+		<!--<Border  >	</Border>-->
+
+		<Panel>
+
+			<Image Source="{Binding SelectedImage}"   Stretch="Fill"  />
+		</Panel>
+
+
+		<DockPanel>
+			<Button Classes="buttonTextStyle"   DockPanel.Dock="Left" Cursor="Hand" Command="{Binding PrevImage}" Content="&lt;" />
+			<Button  Classes="buttonTextStyle"  DockPanel.Dock="Right" Cursor="Hand" Command="{Binding NextImage}" Content=">" />
+			<WrapPanel DockPanel.Dock="Bottom" Height="30"  HorizontalAlignment="Center" >
+
+				<RelativePanel >
+	 
+						<TextBlock RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True"  x:Name="SelectedImageText"  Background="Black" Foreground="White" Text="{Binding SelectedImageText}"></TextBlock>
+	 
+					<ItemsControl
+				Items="{Binding ItemsLeft}"
+				RelativePanel.LeftOf="SelectedImageText"
+						>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Button Classes="buttonTextStyle"
+										Content="{Binding Number}"
+										Command="{Binding $parent[Window].DataContext.OnBtnChange}"
+										CommandParameter="{Binding}"
+										/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+
+					<ItemsControl RelativePanel.RightOf="SelectedImageText" Items="{Binding ItemsRight}" >
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel />
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Button Classes="buttonTextStyle"
+										Content="{Binding Number}"
+										Command="{Binding $parent[Window].DataContext.OnBtnChange}"
+										CommandParameter="{Binding}"
+										/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</RelativePanel>
+
+			</WrapPanel>
+			
+
+			<StackPanel DockPanel.Dock="Top" >
+				<StackPanel HorizontalAlignment="Center" >
+					<WrapPanel  >
+						<!---->
+						<Button  Foreground="#606266" Classes="buttonImageStyle" Cursor="Hand" Name="BtnDownloadImage" Command="{Binding OnDownloadImage}">
+							<Image  Width="20" Height="20" >
+								<DrawingImage>
+									<GeometryDrawing Brush="White" Geometry="{StaticResource GeoDownloadSetting}"/>
+								</DrawingImage>
+							</Image>
+
+						</Button>
+						<Button  Classes="buttonImageStyle"  Cursor="Hand" Command="{Binding OnShowSetting}">
+							<Image   Width="20" Height="20" >
+								<!--<DrawingImage Drawing="{StaticResource IconSetting}"/>-->
+								<DrawingImage>
+									<GeometryDrawing Brush="White" Geometry="{StaticResource GeoIconSetting}"/>
+								</DrawingImage>
+							</Image>
+
+						</Button>
+					</WrapPanel>
+
+
+
+				</StackPanel>
+			</StackPanel>
+
+
+
+
+		</DockPanel>
+		<!--
+		<RelativePanel >
+			<ItemsControl
+				HorizontalAlignment="Left"
+				Items="{Binding ItemsLeft}"
+				Grid.Column="0"
+				RelativePanel.LeftOf=""
+						>
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Button Classes="buttonTextStyle"
+								Content="{Binding Number}"
+								Command="{Binding $parent[Window].DataContext.OnBtnChange}"
+								CommandParameter="{Binding}"
+										/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+			<ItemsControl  Grid.Column="2" Items="{Binding ItemsRight}" >
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Button Classes="buttonTextStyle"
+								Content="{Binding Number}"
+								Command="{Binding $parent[Window].DataContext.OnBtnChange}"
+								CommandParameter="{Binding}"
+										/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+
+		</RelativePanel>
+		-->
+	</Grid>
+
+
+
+</Window>
