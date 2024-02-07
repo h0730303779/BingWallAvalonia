@@ -12,7 +12,8 @@ A Desktop UI Library for Avalonia
 * 一键下载
 * 自动记录下载路径cfg格式
 ## 技术栈
-* 技术栈
+* Avalonia 0.10.18
+* NET 7
 
 ## 截图
 
