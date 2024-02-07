@@ -186,8 +186,7 @@
 								<TextBlock  Text="作者:Summer摇光" />
 
 
-								<TextBlock   Text="博客园:https://www.cnblogs.com/leoxjy" />
-			
+								<TextBlock   Text="博客园:https://www.cnblogs.com/leoxjy" /> 
 							</StackPanel>
 						</Border>
 					</TabItem.Content>

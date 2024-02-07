@@ -7,11 +7,13 @@ using BingWallAvalonia.Services;
 using BingWallAvalonia.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 
 namespace BingWallAvalonia.ViewModels
 {
@@ -20,6 +22,7 @@ namespace BingWallAvalonia.ViewModels
 
         private ImagesModel imagesModel;
         private ImageModel selectedimagesModel;
+        private int selectedNum = 0;
 
         [ObservableProperty]
         private string _SelectedImageText;
@@ -59,14 +62,32 @@ namespace BingWallAvalonia.ViewModels
 
         }
 
+        [RelayCommand]
+        public void PrevImage()
+        {
+            ChanageImageByNum(--selectedNum);
+        }
+        [RelayCommand]
+        public void NextImage()
+        {
+            ChanageImageByNum(++selectedNum);
+        }
 
+        private void ChanageImageByNum(int num)
+        {
+            if (num > ItemsAll.Count || num < 1)
+            {
+                return;
+            }
+            var thatItem = ItemsAll.Find(t => t.Number == num);
+            ArgumentNullException.ThrowIfNull(num,nameof(num) + "not find item");
+            ChanageImage(thatItem);
 
-
+        }
 
         [RelayCommand]
         public void OnBtnChange(ImageModel model)
-        {
-            //Console.WriteLine(Number);
+        { 
 
             ChanageImage(model);
         }
@@ -75,48 +96,21 @@ namespace BingWallAvalonia.ViewModels
         {
             string bingImage = "https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=10";
             HttpClient webClient = new HttpClient();
-            //HttpClient.
             string imagesModelJson = webClient.GetStringAsync(bingImage).Result;
-            //if (string.IsNullOrEmpty(imagesModelJson))
-            //{
-
-            //}
-            //SelectedImage = new Bitmap(imagesModelJson);
-
-
             imagesModel = JsonSerializer.Deserialize<ImagesModel>(imagesModelJson);
-
-            //selectedimagesModel = imagesModel.Images[0];
-            //var imgurl = "https://www.bing.com" + selectedimagesModel.Url;
-
-            //var bytes = webClient.GetByteArrayAsync(imgurl).Result;
-            //MemoryStream sStream = new MemoryStream(bytes);
-            //SelectedImage = new Bitmap(sStream);
-            //SelectedImageText = selectedimagesModel.Title;
-            //var iNumber = 0;
-            //foreach (var item in imagesModel.Images)
-            //{
-            //    item.Number = iNumber++;
-            //}
             ItemsAll = imagesModel.Images;
-
             for (int i = ItemsAll.Count; 0 < i; i--)
             {
                 var _tmpitem = ItemsAll[i - 1];
                 _tmpitem.Number = ItemsAll.Count - (i - 1);
-
             }
-
             ChanageImage(ItemsAll[0]);
-
-
         }
-
-
 
         private void ChanageImage(ImageModel imageModel)
         {
             selectedimagesModel = imageModel;
+            selectedNum = imageModel.Number;
             var url = imageModel.Url;
             var imgurl = "https://www.bing.com" + url;
             HttpClient webClient = new HttpClient();
@@ -126,17 +120,16 @@ namespace BingWallAvalonia.ViewModels
             SelectedImageText = imageModel.Title;
             ItemsLeft = new ObservableCollection<ImageModel>();
             ItemsRight = new ObservableCollection<ImageModel>();
-            //ItemsAll.Count - imageModel.Number
-            for (int i = ItemsAll.Count- imageModel.Number +1; i < ItemsAll.Count; i++)
+            for (int i = ItemsAll.Count - imageModel.Number + 1; i < ItemsAll.Count; i++)
             {
                 var _tmpitem = ItemsAll[i];
-                ItemsLeft.Insert(0,_tmpitem);
+                ItemsLeft.Insert(0, _tmpitem);
             }
             for (int i = 0; i < ItemsAll.Count - imageModel.Number; i++)
             {
                 var _tmpitem = ItemsAll[i];
-                ItemsRight.Insert(0,ItemsAll[i]);
-            } 
+                ItemsRight.Insert(0, ItemsAll[i]);
+            }
         }
 
         [RelayCommand]
@@ -152,9 +145,6 @@ namespace BingWallAvalonia.ViewModels
             if (wenjianlj != null)
             {
                 SelectedImage.Save(wenjianlj);
-
-                //var parser = new FileIniDataParser();
-                //IniData data = parser.ReadFile("TestIniFile.ini");
                 ConfigService.Instance.SetProperty("filedir", wenjianlj);
             }
         }
@@ -162,7 +152,6 @@ namespace BingWallAvalonia.ViewModels
         [RelayCommand]
         async void OnShowSetting()
         {
-
             Setting settingDialog = new()
             {
                 Height = 500,
@@ -170,10 +159,7 @@ namespace BingWallAvalonia.ViewModels
             };
             await settingDialog.ShowDialog(ViewLocator.Windows);
 
-
         }
-
-
 
 
         List<FileDialogFilter> GetFilters()
