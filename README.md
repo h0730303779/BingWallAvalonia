@@ -14,6 +14,7 @@ A Desktop UI Library for Avalonia
 ## 技术栈
 * Avalonia 0.10.18
 * NET 7
+* CommunityToolkit.Mvvm 8
 
 ## 截图
 
